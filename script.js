@@ -15,9 +15,21 @@
 
         digitName: "seconds",
         DOM_elem: null,
+        parentNode: null,
+        init: function ({value, title}) {
+            this.parentNode = document.createElement("div")
+            this.parentNode.classList.add("timer__item")
+            var titleElem = document.createElement('p')
+            titleElem.classList.add("timer__title")
+            titleElem.textContent = title
 
-        init: function () {
+            
+
+            this.digit = value
+            this.title = title
+
             this.DOM_elem = document.createElement("p")
+            this.parentNode.append(this.DOM_elem, titleElem)
             this.DOM_elem.textContent = this.toString()
         },
 
@@ -54,13 +66,24 @@
     var Hours = Object.create(Second)
 
 
-    Second.digit = options.seconds ?? 59
-    Minutes.digit = options.minutes ?? 0
-    Hours.digit = options.hours ?? 0
+    Second.digit = options.seconds.value ?? 59
+    Minutes.digit = options.minutes.value ?? 0
+    Hours.digit = options.hours.value ?? 0
 
-    Second.init()
-    Minutes.init()
-    Hours.init()
+    Second.init({
+        title: options.seconds.title ?? "Seconds",
+        value: options.seconds.value ?? 59
+    })
+
+    Minutes.init({
+        title: options.minutes.title ?? "Minutes",
+        value: options.minutes.value ?? 0
+    })
+
+    Hours.init({
+        title: options.hours.title ?? "Hourse",
+        value: options.hours.value ?? 0
+    })
 
     Second.addElementClass(...options.digitClasses.seconds)
     Minutes.addElementClass(...options.digitClasses.minutes)
@@ -77,7 +100,7 @@
         _elem: document.getElementById("timer"),
         timerId: null,
         init: function () {
-            this._elem.append(this.hours.DOM_elem, this.minutes.DOM_elem, this.second.DOM_elem)
+            this._elem.append(this.hours.parentNode, this.minutes.parentNode, this.second.parentNode)
         },
 
         start: function () {
@@ -126,9 +149,18 @@
         fontFamily: options.fontFamily ?? "Arial"
     })
 })({
-    seconds: 10,
-    minutes: 1,
-    hours: 1,
+    seconds: {
+        value: 10,
+        title: "Секунды"
+    },
+    minutes: {
+        value: 1,
+        title: "Минуты"
+    },
+    hours: {
+        value: 1,
+        title: "Часы"
+    },
     fontSize: "30px",
     fontFamily: "Georgia",
     digitClasses: {
